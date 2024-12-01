@@ -90,7 +90,7 @@ const ExcelUpload = () => {
       setFileData([]);
       localStorage.removeItem("uploadedFileNames");
       localStorage.removeItem("fileData");
-      localStorage.removeItem("orderdata");
+      localStorage.removeItem("shops");
     }
   };
 
@@ -251,15 +251,7 @@ const ExcelUpload = () => {
                   </h3>
                   <div className="overflow-x-auto">
                     <table className="w-full table-auto border-collapse bg-white shadow-lg rounded-lg border border-gray-200">
-                      <thead className="bg-green-100 text-left text-xs sm:text-sm text-gray-700 uppercase">
-                        <tr>
-                          <th className="px-4 py-2 border-b">Facts Code</th>
-                          <th className="px-4 py-2 border-b">Code</th>
-                          <th className="px-4 py-2 border-b">Description</th>
-                          <th className="px-4 py-2 border-b">CTN Qty</th>
-                          <th className="px-4 py-2 border-b">MSP</th>
-                        </tr>
-                      </thead>
+                      
                       <tbody className="text-xs sm:text-sm text-gray-600">
                         {file.data.map((row, rowIndex) => (
                           <tr

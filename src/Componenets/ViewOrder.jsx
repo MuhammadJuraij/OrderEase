@@ -8,7 +8,7 @@ const ViewOrder = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedOrders = JSON.parse(localStorage.getItem("orderdata")) || [];
+    const storedOrders = JSON.parse(localStorage.getItem("shops")) || [];
     setOrders(storedOrders);
   }, []);
 
@@ -24,7 +24,7 @@ const ViewOrder = () => {
           item.itemName,
           item.quantity,
           item.amount || "",
-          item.note || ""  // Add the note to the PDF export
+          item.notes || ""  // Add the note to the PDF export
         ]);
       });
     });
@@ -41,7 +41,7 @@ const ViewOrder = () => {
       "Are you sure you want to reset all orders? Navigate to home.."
     );
     if (confirmation) {
-      localStorage.removeItem("orderdata");
+      localStorage.removeItem("shops");
       setOrders([]);
       navigate('/home');
     }
@@ -100,7 +100,7 @@ const ViewOrder = () => {
                           {item.amount || "N/A"}
                         </td>
                         <td className="py-3 px-4 text-xs sm:text-sm text-gray-700">
-                          {item.note || "N/A"}  {/* Display the note */}
+                          {item.notes || "N/A"}  {/* Display the note */}
                         </td>
                       </tr>
                     ))}

@@ -16,6 +16,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/addorder" element={<AddOrder />} />
         <Route path="/vieworder" element={<ViewOrder />} />
+        
         {/* Redirect any unknown path to "/" */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
