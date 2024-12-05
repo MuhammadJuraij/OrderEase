@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const ViewOrder = () => {
   const [orders, setOrders] = useState([]);
+  const [userNote, setUserNote] = useState("");  // To store the user input note
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const ViewOrder = () => {
     doc.setFontSize(18);
     doc.text("Orders List", 14, 20);
     const tableData = [];
+
     orders.forEach((order) => {
       order.items.forEach((item, index) => {
         tableData.push([
@@ -24,17 +26,22 @@ const ViewOrder = () => {
           item.itemName,
           item.quantity,
           item.amount || "",
-          item.notes || ""  // Add the note to the PDF export
+          item.notes || "",  // Add the note to the PDF export
         ]);
       });
     });
+    tableData.push(["", "", "", "", ""]);
+    // Add user note as a row with colspan to span across all columns
+    tableData.push([{ content: userNote, colSpan: 5, styles: { halign: 'start' } }]);
+
     doc.autoTable({
       head: [["Shop Name", "Item Name", "Quantity", "Amount", "Note"]],
       body: tableData,
       startY: 30,
     });
+
     doc.save("orders.pdf");
-  };
+};
 
   const resetOrders = () => {
     const confirmation = window.confirm(
@@ -43,7 +50,7 @@ const ViewOrder = () => {
     if (confirmation) {
       localStorage.removeItem("shops");
       setOrders([]);
-      navigate('/home');
+      navigate("/home");
     }
   };
 
@@ -51,9 +58,15 @@ const ViewOrder = () => {
     navigate("/addorder");
   };
 
+  const handleNoteChange = (e) => {
+    setUserNote(e.target.value); // Update the note input value
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center sm:text-left"> Orders</h2>
+      <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center sm:text-left">
+        Orders
+      </h2>
       {orders.length > 0 ? (
         <>
           <div className="overflow-x-auto bg-white shadow-md rounded-lg mb-6">
@@ -100,7 +113,7 @@ const ViewOrder = () => {
                           {item.amount || "N/A"}
                         </td>
                         <td className="py-3 px-4 text-xs sm:text-sm text-gray-700">
-                          {item.notes || "N/A"}  {/* Display the note */}
+                          {item.notes || "N/A"}
                         </td>
                       </tr>
                     ))}
@@ -109,6 +122,22 @@ const ViewOrder = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Row for submitting user note */}
+          <div className="mb-4">
+            <label htmlFor="userNote" className="block text-gray-600 font-medium">
+              Add a Note:
+            </label>
+            <textarea
+              id="userNote"
+              value={userNote}
+              onChange={handleNoteChange}
+              className="w-full mt-2 p-3 border rounded-md border-gray-300"
+              rows="4"
+              placeholder="Enter a note for the order..."
+            />
+          </div>
+
           <div className="flex flex-col gap-4 sm:gap-6">
             <button
               onClick={addOrder}
