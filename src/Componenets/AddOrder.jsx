@@ -45,9 +45,12 @@ const Addorder = () => {
 
   const handleSelectItem = (item) => {
     setSelectedItem(item);
-    setSearchTerm(Object.values(item).join(', ')); // Populate input field with the selected item details
+    // Update to only include the first four columns
+    const itemDetails = Object.values(item).slice(0, 3).join(', ');
+    setSearchTerm(itemDetails); // Populate input field with the selected item details
     setIsDropdownVisible(false); // Hide dropdown when an item is selected
   };
+  
 
   const handleAddRow = () => {
     if (!customerName || !quantity || !selectedItem) {
@@ -111,7 +114,8 @@ const Addorder = () => {
       const existingShopIndex = storedShops.findIndex(shop => shop.shopName === customerName);
 
       const items = orderData.map(order => ({
-        itemName: Object.values(order.selectedItem).join(', '),  // Joining selected item details as item name
+        itemName: Object.values(order.selectedItem).slice(0, 3).join(', '),
+  // Joining selected item details as item name
         quantity: order.quantity,
         amount: order.amount,
         notes: order.notes,
@@ -262,7 +266,7 @@ const Addorder = () => {
                   {orderData.map((row, index) => (
                     <tr key={index}>
                       <td className="border p-2">{row.customerName}</td>
-                      <td className="border p-2">{Object.values(row.selectedItem).join(', ')}</td>
+                      <td className="border p-2">{Object.values(row.selectedItem).slice(0, 3).join(', ')}</td>
                       <td className="border p-2">{row.quantity}</td>
                       <td className="border p-2">{row.amount}</td>
                       <td className="border p-2">{row.notes}</td>
