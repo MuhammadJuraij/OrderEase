@@ -35,7 +35,7 @@ const ViewOrder = () => {
     tableData.push([{ content: userNote, colSpan: 5, styles: { halign: 'start' } }]);
 
     doc.autoTable({
-      head: [["Shop Name", "Item Name", "Quantity", "Amount", "Note"]],
+      head: [["Customer Name", "Item Name", "Quantity", "Amount", "Note"]],
       body: tableData,
       startY: 30,
     });
