@@ -15,33 +15,72 @@ const ViewOrder = () => {
 
   const exportToPDF = () => {
     const doc = new jsPDF();
+  
+    // Set custom font and add title
+    doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.text("Orders List", 14, 20);
+  
     const tableData = [];
-
+  
+    // Loop through orders to format the data
     orders.forEach((order) => {
       order.items.forEach((item, index) => {
         tableData.push([
-          index === 0 ? order.shopName : "",
+          index === 0 ? order.shopName : "", // Merge cells for shopName
           item.itemName,
           item.quantity,
           item.amount || "",
-          item.notes || "",  // Add the note to the PDF export
+          item.notes || "",
         ]);
       });
     });
+  
+    // Add an empty row for spacing
     tableData.push(["", "", "", "", ""]);
-    // Add user note as a row with colspan to span across all columns
-    tableData.push([{ content: userNote, colSpan: 5, styles: { halign: 'start' } }]);
-
+  
+    // Add user note with colspan styling
+    tableData.push([
+      { content: userNote, colSpan: 5, styles: { halign: "left", fontStyle: "italic" } },
+    ]);
+  
+    // Customize the table
     doc.autoTable({
-      head: [["Customer Name", "Item Name", "Quantity", "Amount", "Note"]],
+      head: [["Customer Name", "Item Name", "Quantity", "Amount", "Note"]], // Header row
       body: tableData,
-      startY: 30,
+      startY: 30, // Position below the title
+      theme: "grid", // Use grid theme (other options: striped, plain)
+      headStyles: {
+        fillColor: [22, 160, 133], // Green header background
+        textColor: 255, // White text
+        fontSize: 12, // Header font size
+        halign: "center", // Center align header text
+      },
+      bodyStyles: {
+        textColor: [60, 60, 60], // Dark gray text
+        fontSize: 10, // Body font size
+      },
+      alternateRowStyles: {
+        fillColor: [240, 240, 240], // Light gray for alternate rows
+      },
+      styles: {
+        cellPadding: 4, // Cell padding
+        lineColor: [44, 62, 80], // Border color
+        lineWidth: 0.5, // Border width
+      },
+      columnStyles: {
+        0: { cellWidth: 30 }, // Set column width for "Customer Name"
+        1: { cellWidth: 70 }, // Increased width for "Item Name"
+        2: { cellWidth: 25, halign: "center" }, // Slightly increased width for "Quantity"
+        3: { cellWidth: 25, halign: "center" }, // Slightly increased width for "Amount"
+        4: { cellWidth: 40 }, // Set column width for "Note"
+      },
     });
-
+  
+    // Save the PDF
     doc.save("orders.pdf");
-};
+  };
+  
 
   const resetOrders = () => {
     const confirmation = window.confirm(
